@@ -1,30 +1,55 @@
 package main.Ejercicio_03_listLeves;
 
-
 import main.Materia.Models.Node;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class ListLevels {
-    public List<List<Node>> listLevels(Node root) {
-        List<List<Node>> result = new ArrayList<>();
-        if (root == null) return result;
-        Queue<Node> queue = new LinkedList<>();
-        queue.offer(root);
-        while (!queue.isEmpty()) {
-            int levelSize = queue.size();
-            List<Node> levelNodes = new ArrayList<>();
-            for (int i = 0; i < levelSize; i++) {
-                Node current = queue.poll();
-                levelNodes.add(current);
-                if (current.getLeft() != null) queue.offer(current.getLeft());
-                if (current.getRight() != null) queue.offer(current.getRight());
-            }
-            result.add(levelNodes);
+    
+    public List<ListNode> listLevels(Node nodoRaiz) {
+        List<ListNode> listaResultado = new ArrayList<>();
+        
+        if (nodoRaiz == null) {
+            return listaResultado;
         }
-        return result;
+        
+        procesarNiveles(nodoRaiz, listaResultado);
+        return listaResultado;
+    }
+    
+    private void procesarNiveles(Node raiz, List<ListNode> resultado) {
+        Queue<Node> colaAuxiliar = new LinkedList<>();
+        colaAuxiliar.offer(raiz);
+        
+        while (!colaAuxiliar.isEmpty()) {
+            int elementosEnNivel = colaAuxiliar.size();
+            ListNode primerNodo = null;
+            ListNode ultimoNodo = null;
+            
+            for (int i = 0; i < elementosEnNivel; i++) {
+                Node nodoEnProceso = colaAuxiliar.poll();
+                ListNode nuevoNodo = new ListNode(nodoEnProceso.getValue());
+                
+                if (primerNodo == null) {
+                    primerNodo = nuevoNodo;
+                    ultimoNodo = nuevoNodo;
+                } else {
+                    ultimoNodo.setNext(nuevoNodo);
+                    ultimoNodo = nuevoNodo;
+                }
+                
+                if (nodoEnProceso.getLeft() != null) {
+                    colaAuxiliar.offer(nodoEnProceso.getLeft());
+                }
+                if (nodoEnProceso.getRight() != null) {
+                    colaAuxiliar.offer(nodoEnProceso.getRight());
+                }
+            }
+            
+            resultado.add(primerNodo);
+        }
+    }
+    
+    public List<ListNode> obtenerListasPorNivel(Node arbol) {
+        return listLevels(arbol);
     }
 }

@@ -4,13 +4,22 @@ import main.Materia.Models.Node;
 
 public class InvertBinaryTree {
     
-    public Node invert(Node root) {
-        if (root == null) {
+    public Node invertTree(Node nodo) {
+        if (nodo == null) {
             return null;
         }
-        Node temp = root.getLeft();
-        root.setLeft(invert(root.getRight()));
-        root.setRight(invert(temp));
-        return root;
+        
+        invertTree(nodo.getLeft());
+        invertTree(nodo.getRight());
+        
+        Node auxiliar = nodo.getLeft();
+        nodo.setLeft(nodo.getRight());
+        nodo.setRight(auxiliar);
+        
+        return nodo;
+    }
+    
+    public Node invertirArbol(Node raizArbol) {
+        return invertTree(raizArbol);
     }
 }
